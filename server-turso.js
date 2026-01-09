@@ -1,5 +1,5 @@
 const express = require('express');
-const { createClient } = require('@libsql/client');
+const { createClient } = require('@libsql/client/web');
 const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
