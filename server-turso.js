@@ -38,16 +38,20 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static('public'));
 
+// Trust proxy for Render
+app.set('trust proxy', 1);
+
 // Session middleware
 app.use(session({
     secret: process.env.SESSION_SECRET || 'phuthanh-secret-key-2026-super-secure',
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000,
-        sameSite: 'lax'
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
     }
 }));
 
