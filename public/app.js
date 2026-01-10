@@ -59,6 +59,22 @@ function getDaysBadge(days) {
     return `<span class="days-badge days-good">${days} ngày</span>`;
 }
 
+// Copy to clipboard function
+function copyToClipboard(text, btn) {
+    navigator.clipboard.writeText(text).then(() => {
+        const originalText = btn.textContent;
+        btn.textContent = '✓';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('copied');
+        }, 1000);
+    }).catch(err => {
+        console.error('Copy failed:', err);
+        alert('Không thể copy. Vui lòng copy thủ công.');
+    });
+}
+
 // DOM Elements
 const navItems = document.querySelectorAll('.nav-item');
 const pageTitle = document.getElementById('pageTitle');
@@ -271,38 +287,58 @@ function renderTable() {
 
         return `
         <tr>
-            <td class="checkbox-column" style="display: ${deleteMode ? 'table-cell' : 'none'};">
+            <td class="checkbox-column" data-label="" style="display: ${deleteMode ? 'table-cell' : 'none'};">
                 <input type="checkbox" class="account-checkbox" data-id="${acc.id}" 
                        ${isSelected ? 'checked' : ''} onchange="toggleAccountSelection('${acc.id}')">
             </td>
-            <td>
+            <td data-label="Loại">
                 <span class="badge badge-category">
                     ${acc.category === 'chatgpt' ? '🤖 ChatGPT' : acc.category === 'veo3' ? '🎥 Veo 3' : '✂️ CapCut'}
                 </span>
             </td>
-            <td><span class="text-truncate" title="${acc.code || ''}">${acc.code || '-'}</span></td>
-            <td><span class="text-truncate" title="${acc.username}">${acc.username}</span></td>
-            <td><span class="text-truncate password-cell" title="${acc.password || ''}">${acc.password || '-'}</span></td>
-            <td>${getDaysBadge(remainingDays)}</td>
-            <td><span class="text-truncate" title="${acc.customerName || ''}">${acc.customerName || '-'}</span></td>
-            <td>
+            <td data-label="Mã"><span class="text-truncate" title="${acc.code || ''}">${acc.code || '-'}</span></td>
+            <td data-label="Tài khoản">
+                <div class="account-cell">
+                    <span class="text-truncate username" title="${acc.username}">${acc.username}</span>
+                    <button class="copy-btn" onclick="copyToClipboard('${acc.username}', this)" title="Copy">📋</button>
+                </div>
+            </td>
+            <td data-label="Mật khẩu">
+                <div class="account-cell">
+                    <span class="text-truncate password-cell" title="${acc.password || ''}">${acc.password || '-'}</span>
+                    ${acc.password ? `<button class="copy-btn" onclick="copyToClipboard('${acc.password}', this)" title="Copy">📋</button>` : ''}
+                </div>
+            </td>
+            <td data-label="Còn lại">${getDaysBadge(remainingDays)}</td>
+            <td data-label="Khách hàng"><span class="text-truncate" title="${acc.customerName || ''}">${acc.customerName || '-'}</span></td>
+            <td data-label="Trạng thái">
                 <button class="toggle-btn toggle-sold ${acc.soldStatus === 'sold' ? 'active' : ''}" 
                         onclick="toggleStatus('${acc.id}', 'soldStatus', '${acc.soldStatus}')">
                     ${acc.soldStatus === 'sold' ? '✓ Đã bán' : '○ Chưa bán'}
                 </button>
             </td>
-            <td>
+            <td data-label="Bảo hành">
                 <button class="toggle-btn toggle-warranty ${acc.warrantyStatus === 'yes' ? 'active' : ''}"
                         onclick="toggleStatus('${acc.id}', 'warrantyStatus', '${acc.warrantyStatus}')">
                     ${acc.warrantyStatus === 'yes' ? '✓ Đã BH' : '○ Chưa BH'}
                 </button>
             </td>
-            <td><span class="text-truncate" title="${acc.warrantyAccount || ''}">${acc.warrantyAccount || '-'}</span></td>
-            <td><span class="text-truncate password-cell" title="${acc.warrantyPassword || ''}">${acc.warrantyPassword || '-'}</span></td>
-            <td>${getDaysBadge(warrantyRemainingDays)}</td>
-            <td><span class="text-truncate" title="${acc.note || ''}">${acc.note || '-'}</span></td>
-            <td>${formatDate(acc.updatedAt)}</td>
-            <td>
+            <td data-label="TK BH">
+                <div class="account-cell">
+                    <span class="text-truncate" title="${acc.warrantyAccount || ''}">${acc.warrantyAccount || '-'}</span>
+                    ${acc.warrantyAccount ? `<button class="copy-btn" onclick="copyToClipboard('${acc.warrantyAccount}', this)" title="Copy">📋</button>` : ''}
+                </div>
+            </td>
+            <td data-label="MK BH">
+                <div class="account-cell">
+                    <span class="text-truncate password-cell" title="${acc.warrantyPassword || ''}">${acc.warrantyPassword || '-'}</span>
+                    ${acc.warrantyPassword ? `<button class="copy-btn" onclick="copyToClipboard('${acc.warrantyPassword}', this)" title="Copy">📋</button>` : ''}
+                </div>
+            </td>
+            <td data-label="Còn BH">${getDaysBadge(warrantyRemainingDays)}</td>
+            <td data-label="Ghi chú"><span class="text-truncate" title="${acc.note || ''}">${acc.note || '-'}</span></td>
+            <td data-label="Cập nhật">${formatDate(acc.updatedAt)}</td>
+            <td data-label="">
                 <div class="action-btns">
                     <button class="btn btn-sm btn-primary" onclick="openEditModal('${acc.id}')">✏️</button>
                     <button class="btn btn-sm btn-danger" onclick="deleteAccount('${acc.id}')">🗑️</button>
