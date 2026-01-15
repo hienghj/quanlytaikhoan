@@ -976,6 +976,23 @@ body {
     border-color: var(--success);
 }
 
+/* Copy All Button */
+.copy-all-btn {
+    background: var(--success) !important;
+    border-color: var(--success) !important;
+    white-space: nowrap;
+}
+
+.copy-all-btn:hover {
+    background: #059669 !important;
+    border-color: #059669 !important;
+}
+
+.copy-all-btn.copied {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
 /* ============================================
    RESPONSIVE DESIGN - MOBILE
    ============================================ */

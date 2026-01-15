@@ -75,6 +75,24 @@ function copyToClipboard(text, btn) {
     });
 }
 
+// Copy all info: Mã | Tài khoản | Mật khẩu
+function copyAllInfo(code, username, password, btn) {
+    const text = `${code || ''} | ${username} | ${password || ''}`.trim();
+    navigator.clipboard.writeText(text).then(() => {
+        const originalText = btn.textContent;
+        btn.textContent = '✓ Đã copy';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.classList.remove('copied');
+        }, 1500);
+    }).catch(err => {
+        console.error('Copy failed:', err);
+        alert('Không thể copy. Vui lòng copy thủ công.');
+    });
+}
+
+
 // DOM Elements
 const navItems = document.querySelectorAll('.nav-item');
 const pageTitle = document.getElementById('pageTitle');
@@ -340,6 +358,7 @@ function renderTable() {
             <td data-label="Cập nhật">${formatDate(acc.updatedAt)}</td>
             <td data-label="">
                 <div class="action-btns">
+                    <button class="btn btn-sm btn-success copy-all-btn" onclick="copyAllInfo('${(acc.code || '').replace(/'/g, "\\'")}', '${acc.username.replace(/'/g, "\\'")}', '${(acc.password || '').replace(/'/g, "\\'")}', this)" title="Copy Mã | TK | MK">📋 All</button>
                     <button class="btn btn-sm btn-primary" onclick="openEditModal('${acc.id}')">✏️</button>
                     <button class="btn btn-sm btn-danger" onclick="deleteAccount('${acc.id}')">🗑️</button>
                 </div>
