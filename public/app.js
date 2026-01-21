@@ -311,7 +311,7 @@ function renderTable() {
             </td>
             <td data-label="Loại">
                 <span class="badge badge-category">
-                    ${acc.category === 'chatgpt' ? '🤖 ChatGPT' : acc.category === 'veo3' ? '🎥 Veo 3' : '✂️ CapCut'}
+                    ${acc.category === 'chatgpt' ? '🤖 ChatGPT' : acc.category === 'veo3' ? '🎥 Veo 3' : acc.category === 'adobe' ? '🎨 Adobe' : '✂️ CapCut'}
                 </span>
             </td>
             <td data-label="Mã"><span class="text-truncate" title="${acc.code || ''}">${acc.code || '-'}</span></td>
@@ -454,6 +454,8 @@ function updateCounts() {
         allAccounts.filter(acc => acc.category === 'veo3').length;
     document.getElementById('count-capcut').textContent =
         allAccounts.filter(acc => acc.category === 'capcut').length;
+    document.getElementById('count-adobe').textContent =
+        allAccounts.filter(acc => acc.category === 'adobe').length;
 }
 
 // Update page title
@@ -462,7 +464,8 @@ function updatePageTitle() {
         'all': 'Tất cả tài khoản',
         'chatgpt': 'ChatGPT',
         'veo3': 'Veo 3',
-        'capcut': 'CapCut'
+        'capcut': 'CapCut',
+        'adobe': 'Adobe'
     };
     pageTitle.textContent = titles[currentCategory] || 'Tài khoản';
     updateAllPassUI();
@@ -656,10 +659,11 @@ async function confirmImportTxt() {
 
                 if (parts.length >= 1 && parts[0]) {
                     const now = Date.now();
-                    // Veo3: 14 ngày, CapCut: 28 ngày, ChatGPT: 30 ngày
+                    // Veo3: 14 ngày, CapCut: 28 ngày, ChatGPT: 30 ngày, Adobe: 120 ngày (4 tháng)
                     let daysToAdd = 30; // Mặc định ChatGPT
                     if (category === 'veo3') daysToAdd = 14;
                     else if (category === 'capcut') daysToAdd = 28;
+                    else if (category === 'adobe') daysToAdd = 120; // 4 tháng
                     const expiryDate = now + (daysToAdd * 24 * 60 * 60 * 1000);
 
                     const account = {
