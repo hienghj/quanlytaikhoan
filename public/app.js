@@ -311,7 +311,7 @@ function renderTable() {
             </td>
             <td data-label="Loại">
                 <span class="badge badge-category">
-                    ${acc.category === 'chatgpt' ? '🤖 ChatGPT' : acc.category === 'veo3' ? '🎥 Veo 3' : acc.category === 'adobe' ? '🎨 Adobe' : '✂️ CapCut'}
+                    ${acc.category === 'chatgpt' ? '🤖 ChatGPT' : acc.category === 'chatgpt-business' ? '💼 GPT Business' : acc.category === 'veo3' ? '🎥 Veo 3' : acc.category === 'adobe' ? '🎨 Adobe' : '✂️ CapCut'}
                 </span>
             </td>
             <td data-label="Mã"><span class="text-truncate" title="${acc.code || ''}">${acc.code || '-'}</span></td>
@@ -450,6 +450,8 @@ function updateCounts() {
     document.getElementById('count-all').textContent = allAccounts.length;
     document.getElementById('count-chatgpt').textContent =
         allAccounts.filter(acc => acc.category === 'chatgpt').length;
+    document.getElementById('count-chatgpt-business').textContent =
+        allAccounts.filter(acc => acc.category === 'chatgpt-business').length;
     document.getElementById('count-veo3').textContent =
         allAccounts.filter(acc => acc.category === 'veo3').length;
     document.getElementById('count-capcut').textContent =
@@ -463,6 +465,7 @@ function updatePageTitle() {
     const titles = {
         'all': 'Tất cả tài khoản',
         'chatgpt': 'ChatGPT',
+        'chatgpt-business': 'ChatGPT Business',
         'veo3': 'Veo 3',
         'capcut': 'CapCut',
         'adobe': 'Adobe'
